@@ -57,8 +57,10 @@ sudo -u webgen git clone  https://github.com/ChelsieSalome/Linux-Assignment-3-pa
 2. Ensure the following files from the repository are in the correct locations on the server:
     * **`generate_index`** : Script that generates the index.html file. 
         *Already located in `/var/lib/webgen/bin/` after cloning the repository. This script generates the `index.html` file.*
-    * **`generate-index.service`**: Copy this file to `/etc/systemd/system/`:
-        `sudo cp /var/lib/webgen/bin/generate-index.service /etc/systemd/system/`
+    * **`generate-index.service`**: Copy this file to `/etc/systemd/system/`:  
+```bash
+sudo cp /var/lib/webgen/bin/generate-index.service /etc/systemd/system/
+```
     * **`generate-index.timer`**: Copy this file to **/etc/systemd/system/**
         `sudo cp /var/lib/webgen/bin/generate-index.timer /etc/systemd/system/`
     - **`nginx.conf`**: This file configures the Nginx server. If there is already an `/etc/nginx/nginx.conf` file on your system, follow these steps:
