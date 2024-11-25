@@ -1,10 +1,9 @@
 # Linux Assignment III - Part 1  
-
 # SALOME CHELSIE LELE WAMBO
 
 # Script Purpose
 
-This project sets up a Bash script to generate a static `index.html` file containing system information. The file is served by an Nginx web server and secured with a firewall using UFW. The system is automated using a systemd service and timer to run daily at 5:00 AM.
+This project sets up a Bash script to generate a static `index.html` file containing system information. The file is served by an Nginx web server and secured with a firewall using UFW. The system is automated using a systemd service and timer to run daily at 5:00 AM PST.
 
 ## Features
 
@@ -53,11 +52,11 @@ This repository contains all the necessary files to set up and automate the gene
    - **Description**: The main Nginx configuration file, modified to include the `sites-enabled` directory for managing server blocks.
    - **Location**: `/etc/nginx/`
 
-5. **`Screenshot-success-it-works.png`**
+5. **`generate-index.conf`**
    - **Description**: An Nginx server block configuration file that serves the `index.html` file.
    - **Location**: `/etc/nginx/sites-available/`
 
-6. **`screenshot.png`**
+6. **`Screenshot-success-it-works.png`**
    - **Description**: A screenshot demonstrating the successful operation of the setup.
 
 ### Step 1: Create a System User
@@ -72,9 +71,10 @@ Creating a **system user** like `webgen` for this task provides several benefits
 - **Isolation**: Keeps files and processes for this task separate from other users or services, making management and debugging easier.
 - **Minimized Risk**: Running services as root is dangerous because any misconfiguration or compromise could allow full system access.  
 
-2. Ensure the user owns its directory:
+2. Ensure the user owns its directory:  
+
 `sudo chown -R webgen:webgen /var/lib/webgen`  
-`sudo chmod -R 755 /var/lib/webgen`
+`sudo chmod -R 755 /var/lib/webgen`  
 
 3. Create the required directories:
 ```bash
@@ -183,7 +183,8 @@ sudo ufw limit ssh
 sudo ufw enable
 ```
 >**WARNING !**:  
-You mush allow SSH traffic before enabling the ufw service.
+You mush allow SSH traffic before enabling the ufw service, because if you enable UFW (Uncomplicated Firewall) without allowing SSH traffic, you could inadvertently lock yourself out of your server, especially if you're managing it remotely.  
+
 Check the status:
 `sudo ufw status`
 
