@@ -1,5 +1,5 @@
 # Linux Assignment III - Part 1  
-# SALOME CHELSIE LELE WAMBO
+# SALOME CHELSIE LELE WAMBO - AO1372274
 
 # Script Purpose
 
