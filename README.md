@@ -232,6 +232,8 @@ If there are syntax errors, review the changes made to /etc/nginx/nginx.conf or 
 ## 3. Missing Firewall Rules  
 * Check the UFW status:
 `sudo ufw status verbose`  
+It give you the following output:  
+![alt text](image-1.png)
 
 * Ensure you have allowed the necessary ports:  
 ```bash
