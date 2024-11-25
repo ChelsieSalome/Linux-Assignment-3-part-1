@@ -53,7 +53,7 @@ This repository contains all the necessary files to set up and automate the gene
    - **Description**: The main Nginx configuration file, modified to include the `sites-enabled` directory for managing server blocks.
    - **Location**: `/etc/nginx/`
 
-5. **`generate-index.conf`**
+5. **`Screenshot-success-it-works.png`**
    - **Description**: An Nginx server block configuration file that serves the `index.html` file.
    - **Location**: `/etc/nginx/sites-available/`
 
