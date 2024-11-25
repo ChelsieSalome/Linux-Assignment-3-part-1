@@ -196,7 +196,7 @@ After completing the setup, verify that your server is running and accessible:
 ![alt text](image.png)
 
 
-## Enhancements to `generate_index` Script  
+# Enhancements to `generate_index` Script  
 Possible ways to enhance the `generate_index` script include:  
 
 1. **Adding Error Logs for Key Variables**:  
@@ -214,22 +214,22 @@ For critical variables such as `KERNEL_RELEASE`, `DATE`, and `UPTIME`, error mes
    - The generated `index.html` file now includes:
      - Disk usage for the `webgen` user.
 
-## Troubleshooting Tips  
-### 1. Nginx Fails to Start or Reload
+# Troubleshooting Tips  
+## 1. Nginx Fails to Start or Reload
 - Run the following to check the configuration:
 ```bash
 sudo nginx -t
 ```  
 If there are syntax errors, review the changes made to /etc/nginx/nginx.conf or the server block file in /etc/nginx/sites-available/.  
 
-### 2. "gnerate_index" Script Fails
+## 2. "gnerate_index" Script Fails
 * Check the logs for the systemd service:  
 `journalctl -u generate-index.service`  
 
 * Ensure the script is executable:  
 `sudo chmod +x /var/lib/webgen/bin/generate_index`
 
-### 3. Missing Firewall Rules  
+## 3. Missing Firewall Rules  
 * Check the UFW status:
 `sudo ufw status verbose`  
 
@@ -238,7 +238,7 @@ If there are syntax errors, review the changes made to /etc/nginx/nginx.conf or 
 sudo ufw allow ssh
 sudo ufw allow http
 ```
-#### 4. Site Not Accessible in Browser of Browser displaying the defauld Nginx index.html page  
+## 4. Site Not Accessible in Browser of Browser displaying the defauld Nginx index.html page  
 * Verify Nginx is running:
 `sudo systemctl status nginx`  
 
