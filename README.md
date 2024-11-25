@@ -222,7 +222,7 @@ sudo nginx -t
 ```  
 If there are syntax errors, review the changes made to /etc/nginx/nginx.conf or the server block file in /etc/nginx/sites-available/.  
 
-## 2. "gnerate_index" Script Fails
+## 2. "generate_index" Script Fails
 * Check the logs for the systemd service:  
 `journalctl -u generate-index.service`  
 
@@ -243,7 +243,7 @@ sudo ufw allow http
 `sudo systemctl status nginx`  
 
 * Clear your browser's cache   
-* Use a differenc browser.  
+* Use a different browser.  
 
 # Sources
 1. https://learning.oreilly.com/library/view/linux-for-system/9781803247946/B18575_02.xhtml#_idParaDest-32  
