@@ -57,37 +57,40 @@ sudo -u webgen git clone  https://github.com/ChelsieSalome/Linux-Assignment-3-pa
 2. Ensure the following files from the repository are in the correct locations on the server:
     * **`generate_index`** : Script that generates the index.html file. 
         *Already located in `/var/lib/webgen/bin/` after cloning the repository. This script generates the `index.html` file.*  
+
     * **`generate-index.service`**: Copy this file to `/etc/systemd/system/`:  
-        `sudo cp /var/lib/webgen/bin/generate-index.service /etc/systemd/system/`
-    * **`generate-index.timer`**: Copy this file to **/etc/systemd/system/**  
-        `sudo cp /var/lib/webgen/bin/generate-index.timer /etc/systemd/system/`
-    - **`nginx.conf`**: This file configures the Nginx server. If there is already an `/etc/nginx/nginx.conf` file on your system, follow these steps:
+        `sudo cp /var/lib/webgen/bin/generate-index.service /etc/systemd/system/`  
+
+    * **`generate-index.timer`**: Copy this file to `/etc/systemd/system/`  
+        `sudo cp /var/lib/webgen/bin/generate-index.timer /etc/systemd/system/`  
+
+    - **`nginx.conf`**: This file configures the Nginx server. If there is already an `/etc/nginx/nginx.conf` file on your system, follow these steps:  
 
     1. **Back up the Existing Configuration**:
-     ```sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak```
+     ```sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak```  
 
     2. **Compare and Merge Changes**:
-        Open the existing `/etc/nginx/nginx.conf` and the repository's `nginx.conf` to identify differences. Ensure the following changes are made:
+        Open the existing `/etc/nginx/nginx.conf` and the repository's `nginx.conf` to identify differences. Ensure the following changes are made:  
         
-        - Replace the `user` directive (usually near the top of the file) with:
-        ```user webgen;```
-        - Ensure the `http` block includes the following at the end:
+        - Replace the `user` directive (usually near the top of the file) with:  
+        ```user webgen;```  
+        - Ensure the `http` block includes the following at the end:  
         ```include /etc/nginx/sites-enabled/*;```
 
     3. **Test the Configuration**:
         After merging the changes, test the Nginx configuration:
-        ```sudo nginx -t```
+        ```sudo nginx -t```  
 
-    4. **Restart Nginx**:
-        Restart the Nginx service to apply changes:
+    4. **Restart Nginx**:  
+        Restart the Nginx service to apply changes:  
         ```sudo systemctl restart nginx ```
 
-    5. **If the Backup is Needed**:
-        If something goes wrong, restore the original configuration:
-        ```sudo cp /etc/nginx/nginx.conf.bak /etc/nginx/nginx.conf```
-        ```sudo systemctl restart nginx```
+    5. **If the Backup is Needed**:  
+        If something goes wrong, restore the original configuration:  
+        ```sudo cp /etc/nginx/nginx.conf.bak /etc/nginx/nginx.conf```  
+        ```sudo systemctl restart nginx```  
 
-    * **`generate-index.conf`**: Copy this file to **/etc/nginx/sites-available/**:
+    * **`generate-index.conf`**: Copy this file to **/etc/nginx/sites-available/**:  
         `sudo cp /var/lib/webgen/bin/generate-index.conf /etc/nginx/sites-available/`
     
 
