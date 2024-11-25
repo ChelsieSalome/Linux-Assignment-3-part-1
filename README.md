@@ -232,7 +232,7 @@ If there are syntax errors, review the changes made to /etc/nginx/nginx.conf or 
 ## 3. Missing Firewall Rules  
 * Check the UFW status:
 `sudo ufw status verbose`  
-It give you the following output:  
+It should give you the following output:  
 ![alt text](image-1.png)
 
 * Ensure you have allowed the necessary ports:  
@@ -240,7 +240,7 @@ It give you the following output:
 sudo ufw allow ssh
 sudo ufw allow http
 ```
-## 4. Site Not Accessible in Browser of Browser displaying the defauld Nginx index.html page  
+## 4. Site Not Accessible in Browser or Browser displaying the defauld Nginx index.html page  
 * Verify Nginx is running:
 `sudo systemctl status nginx`  
 
