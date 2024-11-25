@@ -96,10 +96,11 @@ sudo -u webgen git clone  https://github.com/ChelsieSalome/Linux-Assignment-3-pa
 
 ### Step 3: Configure Nginx
 
-1. Enable the `generate-index.conf` server block:
+1. Enable the `generate-index.conf` server block:  
+
 `sudo ln -s /etc/nginx/sites-available/generate-index.conf /etc/nginx/sites-enabled/`
 
-3. Test and reload Nginx:
+3. Test and reload Nginx:  
 
 ```bash
 sudo nginx -t
