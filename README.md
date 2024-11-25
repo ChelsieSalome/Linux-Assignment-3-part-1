@@ -1,6 +1,8 @@
-# Linux-Assignment-3-part-1
+# Linux Assignment III - Part 1  
 
-# Static System Information Generator
+# SALOME CHELSIE LELE WAMBO
+
+# Script Purpose
 
 This project sets up a Bash script to generate a static `index.html` file containing system information. The file is served by an Nginx web server and secured with a firewall using UFW. The system is automated using a systemd service and timer to run daily at 5:00 AM.
 
@@ -29,7 +31,34 @@ This project sets up a Bash script to generate a static `index.html` file contai
   - `nginx`
   - `ufw`
   - `git`
-  Can be installed with `sudo pacman -S nginx ufw git`.
+  Can be installed with `sudo pacman -S nginx ufw git`.  
+
+## Repository File Descriptions and Server Locations
+
+This repository contains all the necessary files to set up and automate the generation of the `index.html` file. Below is a description of each file and its required location on the server:
+
+1. **`generate_index`**
+   - **Description**: A Bash script that generates the `index.html` file containing system information.
+   - **Location**: `/var/lib/webgen/bin/`
+
+2. **`generate-index.service`**
+   - **Description**: A systemd service file that runs the `generate_index` script to update the `index.html` file.
+   - **Location**: `/etc/systemd/system/`
+
+3. **`generate-index.timer`**
+   - **Description**: A systemd timer file that schedules the `generate-index.service` to run daily at 5:00 AM.
+   - **Location**: `/etc/systemd/system/`
+
+4. **`nginx.conf`**
+   - **Description**: The main Nginx configuration file, modified to include the `sites-enabled` directory for managing server blocks.
+   - **Location**: `/etc/nginx/`
+
+5. **`generate-index.conf`**
+   - **Description**: An Nginx server block configuration file that serves the `index.html` file.
+   - **Location**: `/etc/nginx/sites-available/`
+
+6. **`screenshot.png`**
+   - **Description**: A screenshot demonstrating the successful operation of the setup.
 
 ### Step 1: Create a System User
 
