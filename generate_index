@@ -1,0 +1,95 @@
+#!/bin/bash
+
+set -euo pipefail
+
+# this is the generate_index script
+# you shouldn't have to edit this script
+
+# Variables
+#
+# Retrieve kernel release
+if KERNEL_RELEASE=$(uname -r); then
+	echo "Kernel Release retrieved successfully."
+else
+	echo "Error: Failed to retrieve kernel release." >&2
+    exit 1
+fi
+
+OS_NAME=$(grep '^PRETTY_NAME' /etc/os-release | cut -d '=' -f2 | tr -d '"')
+
+# Retrieve the date
+if DATE=$(date +"%d/%m/%Y"); then
+	echo "Date retrieved successfully."
+else
+    echo "Error: Failed to retrieve date." >&2
+    exit 1
+fi
+
+PACKAGE_COUNT=$(pacman -Q | wc -l)
+
+# Retrieving the system's uptime
+if UPTIME=$(uptime -p); then
+	echo "System's uptime successfully retrieved."
+else
+	echo "Error: unable to retrieve the system's uptime." >&2
+	exit 1
+fi
+
+OUTPUT_DIR="/var/lib/webgen/HTML"
+OUTPUT_FILE="$OUTPUT_DIR/index.html"
+
+# Ensure the target directory exists
+if [[ ! -d "$OUTPUT_DIR" ]]; then
+    echo "Error: Failed to create or access directory $OUTPUT_DIR." >&2
+    exit 1
+fi
+
+# Retrieving the disk used on the root file system
+DISK_USAGE=$(du -sh /var/lib/webgen 2>/dev/null | awk '{print $1}')
+
+#################################################################################################################################
+# Command breakdown:
+# - df: df stands for disk free, displays disk usage information for file systems
+# - -h flag: Outputs sizes in a human-readable format
+# - /: Specifies the root directory to display its disk usage.
+# - |: Pipe => passes the output of df -h / as input to the awk command for further processing.
+# - awk -> text-processing tool that splits input into fields
+# - $1 -> print the output
+# - $(): command substitution -> captures the output of the command and assigns it to the variable "DISK_USAGE"
+# Sources: https://learning.oreilly.com/library/view/linux-for-system/9781803247946/B18575_02.xhtml#_idParaDest-32 (Chapter 2)
+################################################################################################################################
+
+if [[ -n "$DISK_USAGE" ]]; then
+        echo "Disk usage information on the root successfully calculated"
+else
+        echo "Unable to retrieve disk usage information"
+fi
+
+# Create the index.html file
+cat <<EOF > "$OUTPUT_FILE"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Information</title>
+</head>
+<body>
+    <h1>System Information</h1>
+    <p><strong>Kernel Release:</strong> $KERNEL_RELEASE</p>
+    <p><strong>Operating System:</strong> $OS_NAME</p>
+    <p><strong>Date:</strong> $DATE</p>
+    <p><strong>Number of Installed Packages:</strong> $PACKAGE_COUNT</p>
+    <p><strong>System Uptime:</strong> $UPTIME</p>
+    <p><strong>Disk Usage (for the webgen user):</strong> $DISK_USAGE</p>
+</body>
+</html>
+EOF
+
+# Check if the file was created successfully
+if [ $? -eq 0 ]; then
+    echo "Success: File created at $OUTPUT_FILE."
+else
+    echo "Error: Failed to create the file at $OUTPUT_FILE." >&2
+    exit 1
+fi

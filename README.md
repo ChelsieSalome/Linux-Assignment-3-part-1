@@ -35,10 +35,17 @@ This project sets up a Bash script to generate a static `index.html` file contai
 
 1. Create a non-login system user `webgen` with a home directory:
 
-`sudo useradd -r -m -d /var/lib/webgen -s /usr/sbin/nologin webgen`
+`sudo useradd -r -m -d /var/lib/webgen -s /usr/sbin/nologin webgen`  
+
+> Note:  
+Creating a **system user** like `webgen` for this task provides several benefits:
+- **Security**: A system user with no login shell and restricted permissions limits potential vulnerabilities. Even if the user is compromised, it cannot directly access other parts of the system.
+- **Isolation**: Keeps files and processes for this task separate from other users or services, making management and debugging easier.
+- **Minimized Risk**: Running services as root is dangerous because any misconfiguration or compromise could allow full system access.  
 
 2. Ensure the user owns its directory:
-`sudo chown -R webgen:webgen /var/lib/webgen`
+`sudo chown -R webgen:webgen /var/lib/webgen`  
+`sudo chmod -R 755 /var/lib/webgen`
 
 3. Create the required directories:
 ```bash
@@ -92,6 +99,11 @@ sudo -u webgen git clone  https://github.com/ChelsieSalome/Linux-Assignment-3-pa
 
     * **`generate-index.conf`**: Copy this file to **/etc/nginx/sites-available/**:  
         `sudo cp /var/lib/webgen/bin/generate-index.conf /etc/nginx/sites-available/`
+        > **Note**:  
+        Using a separate server block file instead of modifying the main nginx.conf file directly offers to following advantages:  
+        1. It keeps each site's configuration in its own file which is practical if your server is managing multiple files.  
+        2. You can enable or disable individual configurations without affecting the main `nginx.conf`.  
+        3. Editing `nginx.conf` directly increases the risk of breaking the entire Nginx setup due to errors in the configuration.  
     
 
 ### Step 3: Configure Nginx
@@ -126,7 +138,9 @@ sudo systemctl reload nginx
 sudo systemctl enable --now generate-index.service
 sudo systemctl enable --now generate-index.timer
 ```
-
+3. To verify that the timer is active and that the service runs successfully, run: 
+* `systemctl list-timers` to **Check active timers**.  
+* `journalctl -u generate-index.service` to Check service logs.  
 
 ### Step 5: Configure UFW
 
@@ -139,8 +153,77 @@ sudo ufw allow http
 sudo ufw limit ssh
 sudo ufw enable
 ```
+>**WARNING !**:  
+You mush allow SSH traffic before enabling the ufw service.
 Check the status:
 `sudo ufw status`
+
+### Step 6: Ensure your server is running  
+After completing the setup, verify that your server is running and accessible:
+1. Open a web browser.  
+2. Enter your server's public IP address (e.g., http://<your-server-ip>).  
+3. You should see the system information displayed on the webpage as such: 
+![alt text](image.png)
+
+
+## Enhancements to `generate_index` Script  
+Possible ways to enhance the `generate_index` script include:  
+
+1. **Adding Error Logs for Key Variables**:  
+For critical variables such as `KERNEL_RELEASE`, `DATE`, and `UPTIME`, error messages are logged to standard error (`>&2`) if their retrieval fails.  
+
+2. **Disk Usage Information for the `webgen` User**:
+- The script calculates the total disk usage of the `webgen` user directory (`/var/lib/webgen`) using the `du` command:
+```DISK_USAGE=$(du -sh /var/lib/webgen 2>/dev/null | awk '{print $1}')```
+   - This information is included in the generated `index.html` file.  
+
+3. **Improved Directory Validation**:
+   - Before creating the `index.html` file, the script verifies that the target directory (`/var/lib/webgen/HTML`) exists. If it doesn’t, the script logs an error and exits.
+
+4. **HTML Updates**:
+   - The generated `index.html` file now includes:
+     - Disk usage for the `webgen` user.
+
+## Troubleshooting Tips  
+### 1. Nginx Fails to Start or Reload
+- Run the following to check the configuration:
+```bash
+sudo nginx -t
+```  
+If there are syntax errors, review the changes made to /etc/nginx/nginx.conf or the server block file in /etc/nginx/sites-available/.  
+
+### 2. "gnerate_index" Script Fails
+* Check the logs for the systemd service:  
+`journalctl -u generate-index.service`  
+
+* Ensure the script is executable:  
+`sudo chmod +x /var/lib/webgen/bin/generate_index`
+
+### 3. Missing Firewall Rules  
+* Check the UFW status:
+`sudo ufw status verbose`  
+
+* Ensure you have allowed the necessary ports:  
+```bash
+sudo ufw allow ssh
+sudo ufw allow http
+```
+#### 4. Site Not Accessible in Browser of Browser displaying the defauld Nginx index.html page  
+* Verify Nginx is running:
+`sudo systemctl status nginx`  
+
+* Clear your browser's cache   
+* Use a differenc browser.  
+
+# Sources
+1. https://learning.oreilly.com/library/view/linux-for-system/9781803247946/B18575_02.xhtml#_idParaDest-32  
+2. https://wiki.archlinux.org/title/Nginx  
+3. https://wiki.archlinux.org/title/Uncomplicated_Firewall  
+4. https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units  
+5. https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files  
+6. https://wiki.archlinux.org/title/Systemd/Timers  
+
+
 
 
 
