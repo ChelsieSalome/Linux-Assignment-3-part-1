@@ -96,7 +96,16 @@ sudo -u webgen git clone  https://github.com/ChelsieSalome/Linux-Assignment-3-pa
 
 ### Step 3: Configure Nginx
 
-1. Enable the `generate-index.conf` server block:  
+1. **Create the Directories (If They Don't Exist)**:  
+
+Nginx does not create `sites-available` and `sites-enabled` by default. Create these directories:  
+
+   ```bash
+   sudo mkdir -p /etc/nginx/sites-available
+   sudo mkdir -p /etc/nginx/sites-enabled
+   ```
+
+2. Enable the Site: Create a symlink in the **sites-enabled directory** to enable the server block:  
 
 `sudo ln -s /etc/nginx/sites-available/generate-index.conf /etc/nginx/sites-enabled/`
 
